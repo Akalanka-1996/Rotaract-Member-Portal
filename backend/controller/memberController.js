@@ -24,7 +24,7 @@ const getMemberById = asyncHandler(async (req, res) => {
 // register user
 
 const registerMember = asyncHandler(async (req, res) => {
-    const {memberName, email, password, RACUOK_ID, birthDate, city, avenue, academicYear, pic, userRole} = req.body
+    const {memberName, email, password, racId, birthDate, city, avenue, academicYear, pic, userRole} = req.body
 
     const memberExists = await Member.findOne({email})
 
@@ -35,7 +35,7 @@ const registerMember = asyncHandler(async (req, res) => {
 
     // create new Member
     const member = await Member.create({
-        memberName, email, password, RACUOK_ID, birthDate, city, avenue, academicYear, pic, userRole
+        memberName, email, password, racId, birthDate, city, avenue, academicYear, pic, userRole
     });
 
     if (member) {
@@ -44,7 +44,7 @@ const registerMember = asyncHandler(async (req, res) => {
             _id:member._id,
             memberName:member.memberName,
             email:member.email,
-            RACUOK_ID:member.RACUOK_ID,
+            racId:member.RACUOK_ID,
             userRole:member.userRole,
             token:generateToken(member._id)
         })

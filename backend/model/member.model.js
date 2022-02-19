@@ -22,7 +22,7 @@ const memberSchema = new Schema({
         required:true,
         minlength:6
     },
-    RACUOK_ID:{
+    racId:{
         type:String,
          required:true
     },
