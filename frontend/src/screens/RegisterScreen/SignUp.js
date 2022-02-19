@@ -15,7 +15,7 @@ const SignUp = () => {
     const [password, setPassword] = useState("")
     const [confirmPassword, setConfirmPassword] = useState("")
     const [loading, setLoading] = useState(false)
-    const [isMatched, setIsMatched] = useState(false)
+    const [isValid, setIsValid] = useState(false);
     const [error, setError] = useState(false)
 
 
@@ -23,9 +23,10 @@ const SignUp = () => {
         e.preventDefault()
 
         if (password !== confirmPassword) {
-            setIsMatched(false)    
+            setIsValid(false)
+            alert("Passwords does not match!")
         } else {
-            setIsMatched(true)
+            setIsValid(true)
 
             try {
                 const config = {
@@ -54,7 +55,6 @@ const SignUp = () => {
 
     return (
         <div className='container'>
-
             <div className='row mt-5'>
                 <div className='col-md-6'>
                     <h2 className='text-center mb-5 fw-bold fs-1'>Sign Up</h2>
