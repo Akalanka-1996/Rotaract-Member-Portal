@@ -1,6 +1,8 @@
 const asyncHandler = require('express-async-handler')
 const Member = require('../model/member.model')
 const generateToken = require('../utils/generateToken')
+const crypto = require('crypto')
+const sendEmail = require('../utils/sendEmail')
 
 // get all members
 
@@ -79,6 +81,59 @@ const authMember = asyncHandler(async (req,res) => {
     }
 
    
-});
+})
 
-module.exports = {registerMember, authMember, getAllMembers, getMemberById}
+// forget password
+
+const forgotPassword = asyncHandler(async (req, res) => {
+    const {email} = req.body
+
+    try {
+        const member = await Member.findOne({email})
+
+        if (!member) {
+            res.status(404)
+            throw new Error("No email could not be sent")
+        }
+
+        const resetToken = member.getResetPasswordToken()
+
+        await member.save()
+
+        const resetUrl = `http://localhost:3000/fogot/${resetToken}`
+
+        // HTML Message
+
+        const message = `
+        <h1>You have requested a password reset</h1>
+        <p>Please make a put request to the following link:</p>
+        <a href=${resetUrl} clicktracking=off>${resetUrl}</a>
+        `
+
+        try {
+            await sendEmail({
+                to: member.email,
+                subject: "Password Reset Request",
+                text: message
+            })
+
+            res.status(200).json({success: true, data: "Email sent"})
+
+        } catch (error) {
+            console.log(error)
+
+            member.resetPasswordToken = undefined
+            member.resetPasswordExpire = undefined
+
+            await member.save()
+
+            res.status(500)
+            throw new Error("Email could not be sent")
+
+        }
+    } catch (error) {
+        console.error(error)
+    }
+})
+
+module.exports = {registerMember, authMember, getAllMembers, getMemberById, forgotPassword}

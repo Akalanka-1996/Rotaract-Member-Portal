@@ -1,5 +1,6 @@
 const mongoose = require('mongoose');
 const bcrypt = require('bcryptjs')
+const crypto = require('crypto')
 
 const Schema = mongoose.Schema;
 
@@ -53,7 +54,9 @@ const memberSchema = new Schema({
           enum:['basic', 'director', 'saa','sec','pre','admin'],
           default:'basic'
 
-      }
+      },
+      resetPasswordToken: String,
+      resetPasswordExpire: Date,
 
 },{
     timestamps:true
@@ -75,6 +78,23 @@ memberSchema.pre("save", async function (next) {
 memberSchema.methods.matchPassword = async function (enteredPassword) {
     return await bcrypt.compare(enteredPassword, this.password)
 }
+
+// reset password
+
+memberSchema.methods.getResetPasswordToken = function () {
+    const resetToken = crypto.randomBytes(20).toString("hex");
+  
+    // Hash token (private key) and save to database
+    this.resetPasswordToken = crypto
+      .createHash("sha256")
+      .update(resetToken)
+      .digest("hex");
+  
+    // Set token expire date
+    this.resetPasswordExpire = Date.now() + 10 * (60 * 1000); // Ten Minutes
+  
+    return resetToken;
+  };
 
 const Member = mongoose.model('Member',memberSchema);
 
