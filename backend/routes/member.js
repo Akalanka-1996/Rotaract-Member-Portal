@@ -1,5 +1,5 @@
 const router = require('express').Router()
-const { registerMember, authMember, getAllMembers, getMemberById, forgotPassword } = require('../controller/memberController')
+const { registerMember, authMember, getAllMembers, getMemberById, forgotPassword, resetPassword } = require('../controller/memberController')
 
 const {protect} = require('../middleware/authMiddleware')
 
@@ -8,7 +8,6 @@ router.route('/').post(registerMember)
 router.route('/login').post(authMember)
 router.route('/:id').get(getMemberById)
 router.route('/forgetpassword').post(forgotPassword)
-// router.route("/forgotpassword").post(forgotPassword)
-// router.route("/passwordreset/:resetToken").put(resetPassword)
+router.route("/passwordreset/:resetToken").put(resetPassword)
 
 module.exports = router

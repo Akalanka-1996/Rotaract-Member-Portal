@@ -136,4 +136,36 @@ const forgotPassword = asyncHandler(async (req, res) => {
     }
 })
 
-module.exports = {registerMember, authMember, getAllMembers, getMemberById, forgotPassword}
+// reset password
+
+const resetPassword = asyncHandler(async (req, res) => {
+    const resetPasswordToken = crypto.createHash("sha256").update(req.params.resetToken).digest("hex")
+
+    try {
+        const member = await Member.findOne({
+            resetPasswordToken,
+            resetPasswordExpire: {$gt: Date.now()}
+        })
+
+        if (!member) {
+            res.status(400)
+            throw new Error("Invalid token")
+        }
+
+        member.password = req.body.password
+        member.resetPasswordToken = undefined
+        member.resetPasswordExpire = undefined
+
+        await member.save()
+
+        res.status(201).json({
+            success:true,
+            data:"Password update successfully"
+        })
+    } catch (error) {
+        console.error(error)
+    }
+
+})
+
+module.exports = {registerMember, authMember, getAllMembers, getMemberById, forgotPassword, resetPassword}
