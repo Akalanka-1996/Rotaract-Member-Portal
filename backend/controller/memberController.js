@@ -100,7 +100,7 @@ const forgotPassword = asyncHandler(async (req, res) => {
 
         await member.save()
 
-        const resetUrl = `http://localhost:3000/fogot/${resetToken}`
+        const resetUrl = `http://localhost:3000/reset/${resetToken}`
 
         // HTML Message
 

@@ -1,25 +1,38 @@
-import React ,{Component} from 'react'
+import axios from 'axios';
+import React ,{useState} from 'react'
 import { Form, Button } from 'react-bootstrap';
 import {Image} from "react-bootstrap";
 import {Link} from 'react-router-dom';
-import './forgotpassword.css'
-const Message =()=>{
-
-    return (
-        <p className='p1'> That's okay!...
-            <br/>
-            Just enter the email address you've used to register with us 
-            <br/>
-            and we'll send you a reset link!.
-        </p>
-    )
-
-
-}
-
+import ForgetMessage from '../../components/ForgetMessage'
 
 const ForgotPassword = () => {
-    
+    const [email, setEmail] = useState('')
+    const [loading, setLoading] = useState(false)
+    const [error, setError] = useState(false)
+
+    const submitHandler = async (e) => {
+        e.preventDefault()
+
+        try {
+            const config = {
+                headers : {
+                    "Content-type": "application/json"
+                }
+            }
+
+            setLoading(true)
+
+            const {data} = await axios.post('http://localhost:5000/members/forgetpassword', {email}, config)
+            
+            console.log(data)
+
+            setLoading(false)
+
+            
+        } catch (error) {
+            console.error(error)
+        }
+    }
 
     return (
         <div className='container'>
@@ -29,12 +42,17 @@ const ForgotPassword = () => {
                     <div className='row mt-5'>
                         <h2 className='text-center mb-5 fw-bold fs-1'>Forgot Password</h2>
                     </div>
-                    <Message/>
+                    {<ForgetMessage />}
                     <div className='row'>
-                    <Form>
+                    <Form onSubmit={submitHandler}>
                         <Form.Group className="mb-3" controlId="formBasicEmail">
                             <Form.Label>Email address</Form.Label>
-                            <Form.Control type="email" placeholder="Enter email" />
+                            <Form.Control 
+                            type="email" 
+                            placeholder="Enter email"
+                            value={email}
+                            onChange={(e) => setEmail(e.target.value)} 
+                            />
 
                         </Form.Group>
                         <Button variant="primary" type="submit" className='mb-3'>

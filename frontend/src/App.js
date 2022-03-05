@@ -14,7 +14,7 @@ const App = () => {
           <Route path="/" component={Login} exact />
           <Route path="/register" component={SignUp} exact />
           <Route path="/fogot" component={ForgotPassword} exact />
-          <Route path="/reset" component={Reset} exact />
+          <Route path="/reset/:resetToken" component={Reset} exact />
           <Route path="/home" component={Dashboard} exact />        
           
       </div>

@@ -1,4 +1,5 @@
-import React,{useState} from 'react'
+import React,{useState, useEffect} from 'react'
+import {useHistory}from 'react-router-dom'
 import { Form, Button, Row, Col, Alert } from 'react-bootstrap'
 import { Image } from "react-bootstrap"
 import axios from 'axios'
@@ -17,6 +18,9 @@ const SignUp = () => {
     const [loading, setLoading] = useState(false)
     const [isValid, setIsValid] = useState(false);
     const [error, setError] = useState(false)
+
+    const history = useHistory()
+
 
 
     const submitHandler = async (e) => {

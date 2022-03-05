@@ -10,6 +10,7 @@ const Login = () => {
     const [password, setPassword] = useState('')
     const [loading, setLoading] = useState(false)
     const [error, setError] = useState(false)
+    const [emailError, setEmailError] = useState('')
 
     const history = useHistory()
 
