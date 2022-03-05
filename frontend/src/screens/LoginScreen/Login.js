@@ -1,4 +1,5 @@
 import React, {useEffect, useState} from 'react';
+import { useHistory } from "react-router-dom";
 import { Form, Button } from 'react-bootstrap';
 import {Image} from "react-bootstrap";
 import {Link} from 'react-router-dom';
@@ -9,6 +10,8 @@ const Login = () => {
     const [password, setPassword] = useState('')
     const [loading, setLoading] = useState(false)
     const [error, setError] = useState(false)
+
+    const history = useHistory()
 
     const submitHandler = async (e) => {
         e.preventDefault()
@@ -28,8 +31,8 @@ const Login = () => {
 
             console.log(data)
             localStorage.setItem("userInfo", JSON.stringify(data))
-
             setLoading(false)
+            history.push("/home")
         } catch (error) {
             setError(error.data.message)
         }

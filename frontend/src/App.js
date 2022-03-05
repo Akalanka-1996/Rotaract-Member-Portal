@@ -1,5 +1,5 @@
 import React from 'react'
-import {BrowserRouter as Router, Route, Routes} from 'react-router-dom'
+import { Route } from "react-router-dom"
 import Login from './screens/LoginScreen/Login'
 import SignUp from './screens/RegisterScreen/SignUp'
 import "bootstrap/dist/css/bootstrap.css";
@@ -10,13 +10,15 @@ import Dashboard from './screens/Dashboard/Dashboard';
 
 const App = () => {
     return (
-    <Routes>
-            <Route path="/" element={<Login />} />
-            <Route path="/register" element={<SignUp />} />
-            <Route path="/fogot" element={<ForgotPassword/>} />
-            <Route path="/reset" element={<Reset/>} />
-            <Route path="/home" element={Dashboard} />
-      </Routes>
+      <div className='App'>
+          <Route path="/" component={Login} exact />
+          <Route path="/register" component={SignUp} exact />
+          <Route path="/fogot" component={ForgotPassword} exact />
+          <Route path="/reset" component={Reset} exact />
+          <Route path="/home" component={Dashboard} exact />        
+          
+      </div>
+    
   
     )
 }
